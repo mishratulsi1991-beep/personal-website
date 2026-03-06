@@ -358,11 +358,16 @@ section { padding: 6rem 2rem; }
   gap: 1rem;
 }
 
-.about-photo-secondary img {
+.about-photo-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.about-photo-pair img {
   width: 100%;
-  height: 160px;
+  height: 130px;
   object-fit: cover;
-  object-position: center 20%;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
@@ -981,6 +986,32 @@ footer {
   border-radius: 100px;
 }
 
+/* Photo strips inside interest cards */
+.travel-photos,
+.gym-photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.travel-photos img,
+.gym-photos img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.travel-photos img:hover,
+.gym-photos img:hover {
+  transform: scale(1.04);
+}
+
 /* ===========================
    STOIC QUOTE OF THE DAY
    =========================== */
@@ -1282,6 +1313,8 @@ cite#stoic-author {
   .stoic-card { padding: 2rem 1.5rem; }
   blockquote#stoic-quote { font-size: 1.15rem; }
   .stoic-pillars { grid-template-columns: repeat(2, 1fr); }
+  .travel-photos, .gym-photos { grid-template-columns: 1fr; }
+  .about-photo-pair { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 1024px) {
