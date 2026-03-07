@@ -40,16 +40,32 @@ a { text-decoration: none; color: inherit; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 1000;
-  background: rgba(13,13,34,0.78);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: rgba(13,13,34,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
   transition: var(--transition);
 }
 
+/* Gradient accent separator line — makes navbar visually distinct from dark hero */
+#navbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(15,98,254,0.55) 30%,
+    rgba(105,41,196,0.50) 70%,
+    transparent
+  );
+  pointer-events: none;
+}
+
 #navbar.scrolled {
-  background: rgba(13,13,34,0.96);
-  box-shadow: 0 2px 28px rgba(0,0,0,0.30);
+  background: rgba(13,13,34,0.98);
+  box-shadow: 0 4px 28px rgba(0,0,0,0.35);
 }
 
 .nav-inner {
@@ -405,13 +421,15 @@ a { text-decoration: none; color: inherit; }
 
 .floating-card .fc-icon { font-size: 1rem; }
 
-/* Positioned at ring clock-face borders — ring 220px centered in 360px hero-visual */
-.fc1 { top: 28%;  left: -12%;  animation-delay: 0s; }    /* 10 o'clock:  Lifelong Learner */
-.fc4 { top: 28%;  right: -12%; animation-delay: 1.8s; }  /* 2 o'clock:   Avid Reader */
-.fc3 { top: 44%;  left: -18%;  animation-delay: 0.7s; }  /* 9 o'clock:   Product Leader */
+/* Clock positions on ring (220px r=110, center 180,180 of 360px container)
+   Spread vertically: 11/1 o'clock (top), 9/3 o'clock (mid), 7/5 o'clock (bottom)
+   ~26% vertical gap between each row = ~60px breathing room between cards */
+.fc1 { top: 18%;  left: -2%;   animation-delay: 0s; }    /* 11 o'clock:  Lifelong Learner */
+.fc4 { top: 18%;  right: -3%;  animation-delay: 1.8s; }  /* 1 o'clock:   Avid Reader */
+.fc3 { top: 44%;  left: -17%;  animation-delay: 0.7s; }  /* 9 o'clock:   Product Leader */
 .fc2 { top: 44%;  right: -14%; animation-delay: 1.3s; }  /* 3 o'clock:   Cloud Expert */
-.fc5 { top: 61%;  left: -16%;  animation-delay: 2.4s; }  /* 8 o'clock:   Fitness Enthusiast */
-.fc6 { top: 61%;  right: -10%; animation-delay: 3.1s; }  /* 4 o'clock:   Dog Lover */
+.fc5 { top: 70%;  left: -9%;   animation-delay: 2.4s; }  /* 7 o'clock:   Fitness Enthusiast */
+.fc6 { top: 70%;  right: -2%;  animation-delay: 3.1s; }  /* 5 o'clock:   Dog Lover */
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
