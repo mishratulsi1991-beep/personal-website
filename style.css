@@ -279,12 +279,12 @@ a { text-decoration: none; color: inherit; }
 
 .floating-card .fc-icon { font-size: 1.1rem; }
 
-.fc1 { top: 4%;    left: -22%;  animation-delay: 0s; }    /* top-left:    PMP Certified */
-.fc4 { top: 4%;    right: -22%; animation-delay: 1.8s; }  /* top-right:   Avid Reader */
-.fc3 { top: 42%;   left: -24%;  animation-delay: 0.7s; }  /* mid-left:    Product Leader */
-.fc2 { top: 42%;   right: -22%; animation-delay: 1.3s; }  /* mid-right:   Cloud Expert */
-.fc5 { bottom: 4%; left: -20%;  animation-delay: 2.4s; }  /* bottom-left: Fitness Enthusiast */
-.fc6 { bottom: 4%; right: -22%; animation-delay: 3.1s; }  /* bottom-right: Dog Lover */
+.fc1 { top: 3%;  left: -22%;  animation-delay: 0s; }    /* top-left:    PMP Certified */
+.fc4 { top: 3%;  right: -22%; animation-delay: 1.8s; }  /* top-right:   Avid Reader */
+.fc3 { top: 43%; left: -24%;  animation-delay: 0.7s; }  /* mid-left:    Product Leader */
+.fc2 { top: 43%; right: -22%; animation-delay: 1.3s; }  /* mid-right:   Cloud Expert */
+.fc5 { top: 76%; left: -20%;  animation-delay: 2.4s; }  /* bottom-left: Fitness Enthusiast */
+.fc6 { top: 76%; right: -22%; animation-delay: 3.1s; }  /* bottom-right: Dog Lover */
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
