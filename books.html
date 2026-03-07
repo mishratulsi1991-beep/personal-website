@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reading Journal — Tulsi Mishra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ===========================
+       BOOKS PAGE SPECIFIC
+       =========================== */
+
+    .books-hero {
+      padding: 7rem 2rem 3.5rem;
+      background: linear-gradient(135deg, #f0f5ff 0%, #ede4ff 100%);
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .books-hero .section-label { margin-bottom: 0.75rem; }
+
+    .books-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .books-hero h1 .accent {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .books-hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 2rem;
+    }
+
+    .books-stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .books-stat {
+      text-align: center;
+    }
+
+    .books-stat-num {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .books-stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ===========================
+       YEAR TABS
+       =========================== */
+    .year-tabs-wrap {
+      position: sticky;
+      top: 64px;
+      z-index: 900;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+    }
+
+    .year-tabs {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0;
+    }
+
+    .year-tab {
+      background: none;
+      border: none;
+      padding: 1rem 1.75rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: var(--font);
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      position: relative;
+      bottom: -1px;
+    }
+
+    .year-tab:hover { color: var(--primary); }
+
+    .year-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* ===========================
+       YEAR SECTIONS
+       =========================== */
+    .year-section {
+      display: none;
+      padding: 3rem 2rem 5rem;
+    }
+
+    .year-section.active { display: block; }
+
+    .year-section > .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .year-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .year-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--text);
+    }
+
+    .year-count {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg-alt);
+      padding: 0.25rem 0.85rem;
+      border-radius: 100px;
+    }
+
+    /* ===========================
+       MONTH SECTIONS
+       =========================== */
+    .month-section { margin-bottom: 3.5rem; }
+
+    .month-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .month-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ===========================
+       BOOK CARDS GRID
+       =========================== */
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .book-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .book-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .book-card-header {
+      margin-bottom: 1rem;
+    }
+
+    .book-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+      line-height: 1.3;
+    }
+
+    .book-author {
+      font-size: 0.82rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .book-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 1rem;
+    }
+
+    .book-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      background: linear-gradient(135deg, #e8f0ff, #ede4ff);
+      color: var(--accent);
+    }
+
+    .book-review {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      flex: 1;
+    }
+
+    .book-review p { margin-bottom: 0.6rem; }
+    .book-review p:last-child { margin-bottom: 0; }
+
+    /* Collapsible takeaways */
+    .takeaways-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: var(--font);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 1rem;
+      transition: var(--transition);
+    }
+
+    .takeaways-toggle:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .takeaways-toggle .toggle-arrow {
+      font-size: 1rem;
+      transition: transform 0.25s;
+    }
+
+    .takeaways-toggle.open .toggle-arrow { transform: rotate(90deg); }
+
+    .takeaways-content {
+      display: none;
+      margin-top: 0.75rem;
+      padding: 1rem;
+      background: var(--bg-alt);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .takeaways-content.open { display: block; }
+
+    .takeaways-content ul {
+      padding-left: 1.25rem;
+    }
+
+    .takeaways-content li {
+      margin-bottom: 0.4rem;
+    }
+
+    .takeaways-content strong {
+      color: var(--text);
+    }
+
+    /* ===========================
+       PLACEHOLDER (2026)
+       =========================== */
+    .coming-soon-card {
+      background: linear-gradient(135deg, #f0f5ff, #ede4ff);
+      border: 2px dashed var(--primary);
+      border-radius: var(--radius);
+      padding: 3rem 2rem;
+      text-align: center;
+      max-width: 480px;
+      margin: 3rem auto;
+    }
+
+    .coming-soon-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .coming-soon-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .coming-soon-card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* ===========================
+       RESPONSIVE
+       =========================== */
+    @media (max-width: 768px) {
+      .books-grid { grid-template-columns: 1fr; }
+      .year-tab { padding: 0.85rem 1rem; font-size: 0.82rem; }
+      .books-stats-bar { gap: 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .year-tabs-wrap { padding: 0 1rem; }
+      .year-section { padding: 2rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">TM</a>
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#experience">Experience</a></li>
+        <li><a href="index.html#education">Education</a></li>
+        <li><a href="index.html#certifications">Certifications</a></li>
+        <li><a href="index.html#awards">Awards</a></li>
+        <li><a href="index.html#interests">Interests</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="newsletter.html" target="_blank">Newsletter</a></li>
+        <li><a href="books.html" class="nav-resume-btn" style="background:linear-gradient(135deg,var(--accent),var(--primary));">Books</a></li>
+        <li><a href="resume.html" target="_blank" class="nav-resume-btn">Resume</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+    </div>
+  </nav>
+
+  <!-- BOOKS HERO -->
+  <header class="books-hero">
+    <div class="section-label">Reading Journal</div>
+    <h1>Books I've <span class="accent">Read</span></h1>
+    <p class="books-hero-sub">A personal reading log with reflections and takeaways — from product strategy and stoicism to history and biography.</p>
+    <div class="books-stats-bar">
+      <div class="books-stat">
+        <span class="books-stat-num">81+</span>
+        <span class="books-stat-label">Books Read</span>
+      </div>
+      <div class="books-stat">
+        <span class="books-stat-num">3</span>
+        <span class="books-stat-label">Years Tracked</span>
+      </div>
+      <div class="books-stat">
+        <span class="books-stat-num">2023</span>
+        <span class="books-stat-label">Since</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- YEAR TABS -->
+  <div class="year-tabs-wrap">
+    <div class="year-tabs">
+      <button class="year-tab active" data-year="2026">2026</button>
+      <button class="year-tab" data-year="2025">2025</button>
+      <button class="year-tab" data-year="2024">2024</button>
+      <button class="year-tab" data-year="2023">2023</button>
+    </div>
+  </div>
+
+  <!-- ===================== 2026 ===================== -->
+  <section id="year-2026" class="year-section active">
+    <div class="container">
+      <div class="year-header">
+        <h2 class="year-title">2026</h2>
+        <span class="year-count">In Progress</span>
+      </div>
+      <div class="coming-soon-card">
+        <span class="coming-soon-icon">&#128218;</span>
+        <h3>First book yet to be picked up</h3>
+        <p>The reading list for 2026 is still being decided. Check back soon — new adventures await.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2025 ===================== -->
+  <section id="year-2025" class="year-section">
+    <div class="container">
+      <div class="year-header">
+        <h2 class="year-title">2025</h2>
+        <span class="year-count">16 Books</span>
+      </div>
+
+      <!-- July -->
+      <div class="month-section">
+        <div class="month-label">July</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Parliamentary America</div>
+              <div class="book-author">Maxwell Stearns</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Politics</span>
+              <span class="book-tag">Governance</span>
+            </div>
+            <div class="book-review">
+              <p>A dense and law-heavy read, but it presented a compelling comparison between the American and other democratic systems. The book's key argument stood out: the U.S. could function more effectively by embracing elements of parliamentary democracy.</p>
+              <p>Stearns' proposals — like doubling Congressional seats, using a mixed electoral system, and letting representatives select the president — aim to reduce polarization and promote accountability. The reforms may sound radical, but they are rooted in practical lessons from functioning democracies around the world.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Hooked</div>
+              <div class="book-author">Nir Eyal</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Product Management</span>
+              <span class="book-tag">Psychology</span>
+            </div>
+            <div class="book-review">
+              <p>A compelling read that explores the psychology behind habit-forming products. It goes beyond just explaining how to create addictive user experiences by thoughtfully addressing the ethical responsibility of product designers.</p>
+              <p>Eyal's Hook Model — built around trigger, action, variable reward, and investment — offers a practical framework for understanding how user behaviors are shaped over time. What stands out is how the book speaks to both product creators and users, making it both strategic and self-reflective.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- June -->
+      <div class="month-section">
+        <div class="month-label">June</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Open Organization</div>
+              <div class="book-author">Jim Whitehurst</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Leadership</span>
+              <span class="book-tag">Management</span>
+            </div>
+            <div class="book-review">
+              <p>A valuable read for aspiring managers, especially those curious about how leadership works in open-source environments. While such organizations may appear chaotic from the outside, the book reveals how collaboration, open dialogue, and flat hierarchies drive innovation and alignment.</p>
+              <p>Whitehurst makes a strong case for integrating elements of open-source culture — like transparency and participatory decision-making — into traditional corporate settings to enhance agility and engagement. The practical tips he offers at the end of each chapter are insightful and worth revisiting.</p>
+            </div>
+            <button class="takeaways-toggle" onclick="toggleTakeaways(this)">
+              Key Takeaways <span class="toggle-arrow">&#8250;</span>
+            </button>
+            <div class="takeaways-content">
+              <ul>
+                <li><strong>Lead with Purpose:</strong> Clearly articulate your organization's purpose and values. Ensure decisions align with that purpose to foster trust and commitment.</li>
+                <li><strong>Build a Culture of Engagement:</strong> Involve employees in decision-making. Encourage open dialogue to tap into collective intelligence.</li>
+                <li><strong>Embrace Transparency:</strong> Share information freely to empower informed contributions. Open access fosters accountability and accelerates innovation.</li>
+                <li><strong>Create a Participatory Environment:</strong> Flatten hierarchy where possible — ideas should win on merit, not rank.</li>
+                <li><strong>Nurture Trust and Mutual Respect:</strong> Trust is earned through consistency, openness, and authenticity.</li>
+                <li><strong>Encourage Passionate Debate:</strong> Spirited discussions are productive when focused on shared goals.</li>
+                <li><strong>Focus on Influence over Control:</strong> Shift from command-and-control to influencing and inspiring. Give people autonomy within clear strategic boundaries.</li>
+                <li><strong>Continuously Learn and Adapt:</strong> Be open to feedback and treat change as an ongoing process.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Abundance</div>
+              <div class="book-author">Ezra Klein &amp; Derek Thompson</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Politics</span>
+              <span class="book-tag">Economics</span>
+              <span class="book-tag">Governance</span>
+            </div>
+            <div class="book-review">
+              <p>A highly enlightening read that explores how systemic inefficiencies and bureaucratic obstacles have hindered effective governance in the U.S. The book is packed with powerful examples showing how outdated laws can handicap even well-intentioned reforms, and how waste has permeated government processes.</p>
+              <p>At its core, it offers thought-provoking insights on streamlining governance, reigniting innovation, and restoring America's strengths — namely fast action, practical reform, and collaborative problem-solving. The authors argue that by implementing the right frameworks, the country can once again unlock its full potential.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- May -->
+      <div class="month-section">
+        <div class="month-label">May</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">High Output Management</div>
+              <div class="book-author">Andrew Grove</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Leadership</span>
+              <span class="book-tag">Management</span>
+            </div>
+            <div class="book-review">
+              <p>A must-read for anyone looking to become an effective people or production manager. Rich with real-world examples, the book provides a clear framework for managing teams, increasing productivity, and building scalable systems.</p>
+              <p>Grove emphasizes that a manager's output is best measured by the performance of their team and the teams they influence. The book breaks down complex management principles into actionable strategies and its emphasis on output — not just activity — as the true measure of management success is refreshing.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Let Them Theory</div>
+              <div class="book-author">Mel Robbins</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Self-Help</span>
+              <span class="book-tag">Relationships</span>
+            </div>
+            <div class="book-review">
+              <p>An impactful book centered on the empowering idea of focusing on what you can control — your actions and reactions — rather than trying to change how others behave or think about you. Mel Robbins shares relatable and practical examples of how to apply the "Let Them" mindset in various life contexts, including with parents, partners, friends, children, and in the workplace.</p>
+              <p>While the content is a bit repetitive, the book is ultimately an easy and accessible read that offers valuable reminders for setting boundaries and reducing emotional friction in daily life.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Revenge of the Tipping Point</div>
+              <div class="book-author">Malcolm Gladwell</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Psychology</span>
+              <span class="book-tag">Social Science</span>
+            </div>
+            <div class="book-review">
+              <p>An intriguing follow-up that builds on the ideas introduced in The Tipping Point. While the original focused on mavens, connectors, and salespeople as key influencers, this book introduces overstories, superspreaders, and group dynamics as the driving forces behind how small events spiral into massive societal shifts.</p>
+              <p>It underscores how even the most trivial or overlooked situations can act as catalysts for pandemic-scale chain reactions, showing how fragile and interconnected modern systems truly are.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- April -->
+      <div class="month-section">
+        <div class="month-label">April</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Tipping Point</div>
+              <div class="book-author">Malcolm Gladwell</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Psychology</span>
+              <span class="book-tag">Social Science</span>
+            </div>
+            <div class="book-review">
+              <p>A thought-provoking read that explores why some ideas, products, or trends suddenly take off and become viral phenomena. Gladwell's emphasis on how major shifts often happen due to unexpected, subtle influences — not always the most obvious factors — is what stands out most.</p>
+              <p>A key insight is the role of three personas: Mavens (knowledgeable information-sharers), Connectors (people who bridge different circles), and Salespeople (persuasive communicators). Each plays a critical role in helping ideas reach that crucial "tipping point."</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Age of Revolutions</div>
+              <div class="book-author">Fareed Zakaria</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Politics</span>
+            </div>
+            <div class="book-review">
+              <p>A fascinating, if slightly long, exploration of the key political and social upheavals that have shaped the modern Western world. Zakaria provides historical context for how revolutions — whether in governance, economy, or ideology — paved the way for today's democracies, while also showing how easily nations can swing back toward authoritarianism.</p>
+              <p>One of the most thought-provoking aspects was how Zakaria draws parallels between historical revolutions and current global trends, highlighting the recurring patterns that challenge and redefine modern governance.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- March -->
+      <div class="month-section">
+        <div class="month-label">March</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Trillion Dollar Coach</div>
+              <div class="book-author">Eric Schmidt, Jonathan Rosenberg &amp; Alan Eagle</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Leadership</span>
+              <span class="book-tag">Biography</span>
+              <span class="book-tag">Silicon Valley</span>
+            </div>
+            <div class="book-review">
+              <p>An inspiring read filled with real-life examples that make the reader pause and reflect. What stood out most was Bill Campbell's incredible humility, despite being one of the most influential coaches behind some of Silicon Valley's biggest successes. The book paints a powerful picture of how he applied lessons from his football coaching days to build high-trust, high-performance teams in the tech world.</p>
+              <p>It emphasizes not just trust and candor, but a deeper, more human leadership style grounded in genuine care for people.</p>
+            </div>
+            <button class="takeaways-toggle" onclick="toggleTakeaways(this)">
+              Key Leadership Lessons <span class="toggle-arrow">&#8250;</span>
+            </button>
+            <div class="takeaways-content">
+              <ul>
+                <li><strong>Coach the Whole Person:</strong> Lead with empathy; care about your team personally and professionally.</li>
+                <li><strong>Team First:</strong> Prioritize team cohesion and shared success over individual brilliance.</li>
+                <li><strong>Listen Intently and Communicate Openly:</strong> Great leaders listen more than they talk and resolve tensions with direct, honest conversation.</li>
+                <li><strong>Push for Decisions, Then Align:</strong> Seek consensus, but once a decision is made, commit and execute with full alignment.</li>
+                <li><strong>Lead with Love and Loyalty:</strong> The best teams are built on mutual respect, trust, and emotional connection.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- February -->
+      <div class="month-section">
+        <div class="month-label">February</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Nexus</div>
+              <div class="book-author">Yuval Noah Harari</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">AI &amp; Tech</span>
+              <span class="book-tag">History</span>
+            </div>
+            <div class="book-review">
+              <p>A great but lengthy read, offering an interesting perspective on AI — though not one I fully agree with. The book leans toward doomsaying, touching only briefly on AI's benefits. Despite the overall cautionary tone, it provides a lot to think about, particularly regarding AI regulation and how to prevent it from causing chaos.</p>
+              <p>What stood out most were the historical anecdotes and research on how networks evolved over time, shaping human civilization. The book makes a compelling case for how improvements in information collection and dissemination have profoundly influenced politics and society, for better or worse.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Good Strategy Bad Strategy</div>
+              <div class="book-author">Richard Rumelt</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Strategy</span>
+            </div>
+            <div class="book-review">
+              <p>Tediously long and somewhat repetitive, but its core message stands out: good strategy is much more than just an idea, and bad strategy is mere fluff. The kernel of good strategy — diagnosis, guiding policy, and coherent actions — emphasizes structure, intention, and focus, which are essential for successful execution.</p>
+              <p>The book also explores why bad strategies are so prevalent, illustrating with examples how many companies fail due to vague goals and a lack of clear direction.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Worlds I See</div>
+              <div class="book-author">Dr. Fei-Fei Li</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">AI &amp; Tech</span>
+              <span class="book-tag">Biography</span>
+            </div>
+            <div class="book-review">
+              <p>A deeply insightful and inspiring book that chronicles Fei-Fei Li's personal journey while providing a compelling perspective on the evolution of AI. Her contributions, particularly through ImageNet and AlexNet, played a pivotal role in advancing deep learning.</p>
+              <p>One of the key takeaways is the concept of the "north star shifting" — how AI's goals have evolved from purely technical advancements to more human-centered, ethical applications. Li also highlights AI's potential in healthcare, education, and accessibility, reinforcing how technology can be leveraged to create meaningful change. A thought-provoking read that balances optimism with realism.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- January -->
+      <div class="month-section">
+        <div class="month-label">January</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Transformed</div>
+              <div class="book-author">Marty Cagan</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Product Management</span>
+            </div>
+            <div class="book-review">
+              <p>An insightful read, though slightly redundant compared to Inspired and Empowered. The book clearly differentiates between feature teams and product teams, reinforces the mercenaries vs. missionaries concept, and outlines the process and effort required to transition into a true product team.</p>
+              <p>It provides a structured approach to role delineation, accountability, and driving a change mindset within organizations. I see significant potential for applying these principles in my workplace, especially in fostering ownership and trust to enable a more empowered product culture.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Chip War</div>
+              <div class="book-author">Chris Miller</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Technology</span>
+              <span class="book-tag">Business</span>
+            </div>
+            <div class="book-review">
+              <p>A compelling read that provides a deep understanding of the conception and evolution of semiconductor technology. From the early days of Fairchild Semiconductor and Texas Instruments to the rise of TSMC, the book offers rich insights into the industry's key players — including Gordon Moore, Bob Noyce, Andy Grove, Morris Chang, and Jensen Huang.</p>
+              <p>A must-read for anyone in the computing business, delivering a gripping and comprehensive overview of the semiconductor industry and the critical role chips play as the brains of modern computing. It also examines the strategic role of chips in modern economies and national security.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Empowered</div>
+              <div class="book-author">Marty Cagan</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Product Management</span>
+              <span class="book-tag">Leadership</span>
+            </div>
+            <div class="book-review">
+              <p>Particularly insightful in emphasizing the importance of ownership, accountability, and trust within teams. The contrast between building empowered product teams and the feature teams many companies mistakenly label as product teams was especially striking.</p>
+              <p>The art of product discovery, with its connection to product vision and strategy — and how these elements drive engineering to solve customer problems with creative solutions — was enlightening and inspiring. A key read for any product leader serious about building missionaries, not mercenaries.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== 2024 ===================== -->
+  <section id="year-2024" class="year-section">
+    <div class="container">
+      <div class="year-header">
+        <h2 class="year-title">2024</h2>
+        <span class="year-count">36 Books</span>
+      </div>
+
+      <!-- December -->
+      <div class="month-section">
+        <div class="month-label">December</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Power of Secret Negotiating</div>
+              <div class="book-author">Roger Dawson</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Communication</span>
+            </div>
+            <div class="book-review">
+              <p>A good book for learning the tactics for effective negotiation. Though most of the tactics are most useful in face-to-face deal negotiations, some of the gambits discussed can be applied in a corporate setting as well. The author does a good job of exploring the psychology behind a successful negotiation.</p>
+              <p>Some concepts, like the power of title and position, feel a bit outdated and less relevant in today's business world. Overall a good, informative read — though a bit long.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Message</div>
+              <div class="book-author">Ta-Nehisi Coates</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Journalism</span>
+              <span class="book-tag">Politics</span>
+            </div>
+            <div class="book-review">
+              <p>Not as compelling as the hype suggested. The book was insightful in covering what is happening in Palestine, the white supremacy narrative in South Carolina, and the state of Senegal — but the author didn't quite succeed in tying these stories together. Written as a letter from the author to his students about the art of writing, the plot felt lost after the second chapter.</p>
+              <p>Overall a short, insightful read that could have been better executed.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Four</div>
+              <div class="book-author">Scott Galloway</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Technology</span>
+            </div>
+            <div class="book-review">
+              <p>An engaging analysis of how Google, Amazon, Meta, and Apple — dubbed the "Four Horsemen" — have captured the public's attention and loyalty through innovative strategies. While the data is somewhat outdated (written in 2018), the book's core message about their enduring dominance and diversification strategies remains highly relevant.</p>
+              <p>Galloway delivers thought-provoking insights and a unique perspective on why these companies are positioned to win for years to come.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- November -->
+      <div class="month-section">
+        <div class="month-label">November</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Lean In</div>
+              <div class="book-author">Sheryl Sandberg</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Leadership</span>
+              <span class="book-tag">Gender &amp; Equality</span>
+            </div>
+            <div class="book-review">
+              <p>A concise yet compelling book by one of the tech world's most influential female leaders. Through her personal journey and research, Sandberg highlights the unique challenges women face in the workplace and offers practical solutions to address them.</p>
+              <p>While some may view it as a feminist manifesto, the book transcends labels, focusing on genuine issues of gender inequality. It provides actionable insights for both women and men, showing how men can support greater female participation at work and empower the women in their lives to confidently pursue their ambitions.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Radical Candor</div>
+              <div class="book-author">Kim Scott</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Leadership</span>
+              <span class="book-tag">Management</span>
+            </div>
+            <div class="book-review">
+              <p>A guide for managers on how to provide feedback that is both candid and compassionate, balancing directness with care. While the book primarily targets leaders, it offers valuable lessons on effective people skills that are applicable to anyone aspiring to lead.</p>
+              <p>I found its techniques for conducting different types of meetings — ranging from one-on-ones to full staff gatherings — particularly useful. This book is a resource I plan to revisit if I have the opportunity to lead a team.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Toyota Kata</div>
+              <div class="book-author">Mike Rother</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Management</span>
+              <span class="book-tag">Operations</span>
+            </div>
+            <div class="book-review">
+              <p>Offers valuable insights into process improvement through a mindset of continuous refinement. While focused on manufacturing, Rother's approach — moving from a current state to a target condition in manageable, iterative steps — is applicable across industries, including tech.</p>
+              <p>The book emphasizes two main "kata" or routines: the Improvement Kata (reaching a target condition by systematically working through obstacles in small, iterative steps) and the Coaching Kata (developing teams' skills through structured coaching). It is not a manual but a framework for cultivating habits of curiosity, experimentation, and incremental progress.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- October -->
+      <div class="month-section">
+        <div class="month-label">October</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Thinking, Fast and Slow</div>
+              <div class="book-author">Daniel Kahneman</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Psychology</span>
+              <span class="book-tag">Science</span>
+            </div>
+            <div class="book-review">
+              <p>An exploration of how our minds work through two primary systems: System 1 (fast, automatic, intuitive) and System 2 (slow, deliberate, logical). The book provides insight into the ways these systems shape our judgments and decisions. Despite some ideas seeming straightforward, the book highlights surprising influences on our choices, including trivial details we might typically overlook.</p>
+              <p>The examples around probability, gambling, and rational versus intuitive thought are fascinating. Overall, a thorough read that makes us more mindful of our biases and encourages a more vigilant, balanced approach to decision-making.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Roadside MBA</div>
+              <div class="book-author">Michael Mazzeo, Paul Oyer &amp; Scott Schaefer</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Economics</span>
+            </div>
+            <div class="book-review">
+              <p>Follows three business school professors as they visit small businesses across America, offering insights on how MBA-level principles apply to real-world challenges in diverse industries. From identifying niche markets to understanding delegation, this book effectively distills core MBA principles — like economies of scale, marketing research, and targeted advertising — into easy-to-understand, practical tips.</p>
+              <p>It offers a balanced view of strategies for scaling and optimizing operations, making it relevant for both entrepreneurs and corporate professionals.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Warmth of Other Suns</div>
+              <div class="book-author">Isabel Wilkerson</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Social History</span>
+            </div>
+            <div class="book-review">
+              <p>A monumental yet captivating book that chronicles the Great Migration of African Americans from the South to the North of the United States. Through the lives of three individuals — Ida Mae, a sharecropper; George Starling, a fruit picker; and Robert Pershing Foster, a doctor — the author vividly illustrates the harsh realities of Jim Crow and the deep injustices these individuals faced.</p>
+              <p>The narrative flows with such depth and detail that it almost feels like fiction. For me, this was a deeply eye-opening read, instilling a renewed sense of humility and respect. Much like Caste, this book left a lasting impression.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- September -->
+      <div class="month-section">
+        <div class="month-label">September</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The McKinsey Way</div>
+              <div class="book-author">Ethan M. Rasiel</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Consulting</span>
+            </div>
+            <div class="book-review">
+              <p>Not a particularly good book in my opinion. There was no real actionable advice — mostly a collection of self-congratulatory anecdotes. If you go by the book, what McKinsey really values seems to be appearance and pedigree, with little mention of skills. There are far better books on presentation skills and problem-solving.</p>
+              <p>The only worthwhile takeaway was to focus on meritocracy and hard work. Other than that, the content has been articulated far better in other communication books — especially Carmine Gallo's works.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">On Hinduism</div>
+              <div class="book-author">Wendy Doniger</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Religion</span>
+              <span class="book-tag">History</span>
+            </div>
+            <div class="book-review">
+              <p>A long but interesting book — an in-depth analysis of Hinduism in which the author, through a series of scholarly analyses, provides insights on the evolution of the religion over millennia. The book addresses both contemporary and ancient issues through interpretation of ancient texts as well as modern-day interpretations of Hindu identity and challenges.</p>
+              <p>All in all, a good academic read. Due to the academic nature of the chapters, it took me three months to complete — but well worth the effort for those interested in the subject.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- August -->
+      <div class="month-section">
+        <div class="month-label">August</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Brave New Words</div>
+              <div class="book-author">Salman Khan</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">AI &amp; Tech</span>
+              <span class="book-tag">Education</span>
+            </div>
+            <div class="book-review">
+              <p>The founder of Khan Academy does a great job of providing an optimistic viewpoint on how AI will change education and jobs. The book discusses how, with the proper guardrails, AI can be leveraged for better one-on-one education for students across the world. It also explores how AI can be used as a friend to both students and teachers in ways that enhance creativity.</p>
+              <p>A great read overall — with the exception of the occasional marketing pitch for Khan Academy and Khanmigo. It strongly advocates for a Socratic way of dialogue with AI to get the most out of it.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Trusted Advisor</div>
+              <div class="book-author">David H. Maister, Charles Green &amp; Robert Galford</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Leadership</span>
+            </div>
+            <div class="book-review">
+              <p>A guide for professionals on how to build trust with clients and establish themselves as trusted advisors rather than mere service providers. Through real-world examples and a structured framework, the authors provide a roadmap for transitioning from transactional relationships to ones based on deep trust and mutual respect.</p>
+            </div>
+            <button class="takeaways-toggle" onclick="toggleTakeaways(this)">
+              Key Takeaways <span class="toggle-arrow">&#8250;</span>
+            </button>
+            <div class="takeaways-content">
+              <ul>
+                <li><strong>Trust Equation:</strong> Trust = Credibility + Reliability + Intimacy, minus self-orientation. Maximize the first three and minimize the fourth.</li>
+                <li><strong>Active Listening and Empathy:</strong> Genuinely caring about the client's issues is crucial for building trust.</li>
+                <li><strong>Focus on the Relationship, Not Just the Transaction:</strong> Aim for long-term partnerships rather than individual deals.</li>
+                <li><strong>Trust Takes Time to Build:</strong> Requires consistent effort, transparent communication, and delivering on promises.</li>
+                <li><strong>Client's Best Interests First:</strong> Always act in the client's best interests, even if it doesn't directly benefit you.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- July -->
+      <div class="month-section">
+        <div class="month-label">July</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Magic Words</div>
+              <div class="book-author">Jonah Berger</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Communication</span>
+              <span class="book-tag">Psychology</span>
+            </div>
+            <div class="book-review">
+              <p>A great read with powerful insights on how using the correct words and language can make anyone more credible in any form of communication — professional or personal. The author lays out a seven-step framework for using language to one's advantage.</p>
+            </div>
+            <button class="takeaways-toggle" onclick="toggleTakeaways(this)">
+              The 7-Step Framework <span class="toggle-arrow">&#8250;</span>
+            </button>
+            <div class="takeaways-content">
+              <ul>
+                <li><strong>Activate Identity &amp; Agency:</strong> Use definitive words like "don't" instead of "can't." Nouns are more powerful than verbs — "Will you be a helper?" is more impactful than "Will you help me?"</li>
+                <li><strong>Convey Confidence:</strong> Use present tense more often. Avoid filler words and nervous speech.</li>
+                <li><strong>Ask the Right Questions:</strong> Asking for advice makes you look smarter. Avoid assumptions and follow up.</li>
+                <li><strong>Leverage Concreteness:</strong> Be concrete or abstract depending on context. Concreteness helps people feel heard; abstraction works when keeping things high-level.</li>
+                <li><strong>Employ Emotion:</strong> Use crests and troughs in your story to take your audience on an emotional journey.</li>
+                <li><strong>Harness Similarity and Difference:</strong> Use strategically depending on the context.</li>
+                <li><strong>Use the Right Words Consciously:</strong> Choosing words deliberately can help us let go of biases.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Tools and Weapons</div>
+              <div class="book-author">Brad Smith</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Technology</span>
+              <span class="book-tag">Policy</span>
+            </div>
+            <div class="book-review">
+              <p>Brad Smith, Microsoft's longtime chief legal counsel, covers tech, government policies, and what needs to change for humanity to adapt to fast-paced digital innovations. With numerous examples across 15 chronological chapters, he shows how these three are deeply intertwined.</p>
+              <p>The book touches upon cybersecurity, tech regulation, data regulation, and the AI revolution — and advocates for democratic, humanity-driven control over technological advancements. A riveting read for anyone in the tech industry. The bottom line: technology will advance at a fast rate, and we have to make sure humanity keeps up.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- June -->
+      <div class="month-section">
+        <div class="month-label">June</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Innovation Secrets of Steve Jobs</div>
+              <div class="book-author">Carmine Gallo</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Innovation</span>
+              <span class="book-tag">Leadership</span>
+            </div>
+            <div class="book-review">
+              <p>As effective as the first book in the series. It enumerates the strategies and tools that entrepreneurs and professionals can use to speak to creativity and real innovation in any workplace. The seven principles that Steve Jobs followed are compelling and actionable.</p>
+            </div>
+            <button class="takeaways-toggle" onclick="toggleTakeaways(this)">
+              The 7 Principles <span class="toggle-arrow">&#8250;</span>
+            </button>
+            <div class="takeaways-content">
+              <ul>
+                <li>Do what you love — Think differently about your career</li>
+                <li>Put a dent in the universe — Think differently about your vision</li>
+                <li>Kick-start your brain — Think differently about how you think</li>
+                <li>Sell dreams, not products — Think differently about your customers</li>
+                <li>Say no to 1,000 things — Think differently about design. Apple is more proud of the things it hasn't done than what it has.</li>
+                <li>Create insanely great experiences — Think differently about your brand</li>
+                <li>Master the message — Think differently about your story. There is no value in great ideas if you can't communicate them in an interesting way.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- May -->
+      <div class="month-section">
+        <div class="month-label">May</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Dare to Lead</div>
+              <div class="book-author">Brené Brown</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Leadership</span>
+              <span class="book-tag">Self-Help</span>
+            </div>
+            <div class="book-review">
+              <p>Beautifully written, albeit a bit long. This book teaches the reader how to be a better leader by being appropriately vulnerable. It makes the compelling case that it takes courage to be vulnerable and to have tough conversations. Empathy, connection, and trust are paramount to becoming a better leader.</p>
+              <p>The book is full of relevant, common day-to-day examples that make the case for how daring leadership should look in an age defined by fear, scarcity, and uncertainty.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Stillness Is the Key</div>
+              <div class="book-author">Ryan Holiday</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Stoicism</span>
+              <span class="book-tag">Philosophy</span>
+            </div>
+            <div class="book-review">
+              <p>The third book in Ryan Holiday's Stoicism trilogy brings the concepts full circle. This book talks about how stillness in mind, spirit, and body is important for contentment and purpose. Again full of quotes and inspiring examples, it tells the reader how to practice stillness while going deep into its importance.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Ego Is the Enemy</div>
+              <div class="book-author">Ryan Holiday</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Stoicism</span>
+              <span class="book-tag">Philosophy</span>
+            </div>
+            <div class="book-review">
+              <p>The second book in the trilogy. With a wealth of examples and quotes, the author takes the reader on a self-reflective journey of how ego becomes a hindrance — and how it can creep up in any of the three phases of life (aspiration, success, and failure), almost certainly leading to harm.</p>
+              <p>No matter what you do, one must be in a constant state of learning, with total control and restraint, working without taking pride in results or actions themselves.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Obstacle Is the Way</div>
+              <div class="book-author">Ryan Holiday</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Stoicism</span>
+              <span class="book-tag">Philosophy</span>
+            </div>
+            <div class="book-review">
+              <p>My first book on Stoicism, read after being inspired by quotes from Marcus Aurelius. Ryan Holiday, the modern master of Stoicism, shows through extensive research how one can convert obstacles into opportunities. The book focuses on perception of the roadblock, willingness to act on it (right action, not blind action), and the willpower to persevere through difficulty.</p>
+              <p>A great read — and it left me eager to continue with the rest of the series.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Improv Wisdom</div>
+              <div class="book-author">Patricia Ryan Madson</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Communication</span>
+              <span class="book-tag">Self-Help</span>
+            </div>
+            <div class="book-review">
+              <p>Patricia Ryan Madson, an improv professor at Stanford University, has lucidly imparted improv wisdom through 13 maxims that compel the reader to live in the present and focus on what's important. A short but genuinely impactful read.</p>
+            </div>
+            <button class="takeaways-toggle" onclick="toggleTakeaways(this)">
+              The 13 Maxims <span class="toggle-arrow">&#8250;</span>
+            </button>
+            <div class="takeaways-content">
+              <ul>
+                <li><strong>Say Yes:</strong> There are more instances where you can say yes — don't default to no.</li>
+                <li><strong>Don't Over-Prepare:</strong> Be prepared, but not overly so. Use the present moment effectively. Fear is misplaced attention.</li>
+                <li><strong>Just Show Up — On Time:</strong> Punctuality for yourself and others.</li>
+                <li><strong>Start Anywhere:</strong> All starting points are valid. Trust your mind to develop ideas as you speak.</li>
+                <li><strong>Be Average:</strong> Sometimes the right answer is the obvious one. Think inside the box.</li>
+                <li><strong>Pay Attention:</strong> Observe, find answers, and listen. Shift attention from yourself to others.</li>
+                <li><strong>Face the Facts:</strong> Accept what cannot be changed. Embrace the wobble.</li>
+                <li><strong>Stay on Course:</strong> Have a purpose. Improvise everything to achieve it.</li>
+                <li><strong>Wake Up to the Gifts:</strong> Practice gratitude. Make "thank you" your mantra.</li>
+                <li><strong>Make Mistakes, Please:</strong> Admitting a mistake shows character. Cultivate a flexible mind.</li>
+                <li><strong>Act Now:</strong> Do not procrastinate. If you can't get out of it, get into it.</li>
+                <li><strong>Take Care of Each Other:</strong> Share control and listen.</li>
+                <li><strong>Enjoy the Ride:</strong> Have fun along the way. Lighten up.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- April -->
+      <div class="month-section">
+        <div class="month-label">April</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">1776</div>
+              <div class="book-author">David McCullough</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Biography</span>
+            </div>
+            <div class="book-review">
+              <p>A masterful narrative of the trials and tribulations of the American independence movement in the year 1776. Though the Declaration was written in July, the months that followed — as described in this powerful drama with extraordinary narrative vitality — proved to be perilous. It was through Washington's relentless perseverance and sheer willpower that American independence became a realized dream.</p>
+              <p>The book also pays tribute to Nathaniel Greene and Henry Knox, who were instrumental in the war. A gripping read with great narrative that keeps the reader hooked throughout.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Goal</div>
+              <div class="book-author">Eli Goldratt</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Management</span>
+              <span class="book-tag">Operations</span>
+            </div>
+            <div class="book-review">
+              <p>A must-read for managers, DevOps practitioners, and supply chain professionals. It focuses on exploiting bottlenecks and controlling flow in order to manage inventory and throughput. Having read The Phoenix Project first, it's clear that book was deeply inspired by The Goal. The concepts for improving throughput translate very well into a software DevOps environment.</p>
+            </div>
+            <button class="takeaways-toggle" onclick="toggleTakeaways(this)">
+              The Five Steps <span class="toggle-arrow">&#8250;</span>
+            </button>
+            <div class="takeaways-content">
+              <ul>
+                <li>Identify the system constraint</li>
+                <li>Decide how to exploit the system's constraint</li>
+                <li>Subordinate everything else to the above decision</li>
+                <li>Elevate / empower the system's constraints</li>
+                <li>If a constraint has been broken in the previous steps, go back to Step 1 — but do not allow inertia to cause a new system constraint</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Inspired</div>
+              <div class="book-author">Marty Cagan</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Product Management</span>
+            </div>
+            <div class="book-review">
+              <p>Easily one of the best product management books out there. The book lived up to its hype. As a product manager, it forced me to ask whether I was doing the right things and showed me areas where I could improve. I've already started implementing some of the concepts in my work, and it also prompted me to assess whether the culture at my company is right for building great products.</p>
+              <p>A must-read for every PM and tech manager. I will definitely return to this book multiple times throughout my career.</p>
+            </div>
+            <button class="takeaways-toggle" onclick="toggleTakeaways(this)">
+              Key Takeaways <span class="toggle-arrow">&#8250;</span>
+            </button>
+            <div class="takeaways-content">
+              <ul>
+                <li>Product team members should be missionaries, not mercenaries</li>
+                <li>Always maintain a stubborn product vision and a good product strategy</li>
+                <li>Business outcomes are the key measure of success</li>
+                <li>All products should have value, feasibility, usability, and business viability</li>
+                <li>Solve the problem with the business objective in mind</li>
+                <li>Gradually shift focus from features to business outcomes</li>
+                <li>A strong innovation culture must be aligned with a strong execution culture</li>
+                <li>Include engineering early in the product discovery process</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Keeping at It</div>
+              <div class="book-author">Paul Volcker</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Finance</span>
+              <span class="book-tag">Biography</span>
+            </div>
+            <div class="book-review">
+              <p>A must-read for anyone interested in finance or associated with the financial industry. This memoir of one of the most important figures in U.S. financial history covers Paul Volcker's career across the New York Fed, the Federal Reserve, and multiple corporate roles. The reader gets a real feel for how finance works at an international and national level.</p>
+              <p>Volcker draws a parallel between good finance and good governance. Though sometimes a bit technical, it's an informative and illuminating read overall.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- March -->
+      <div class="month-section">
+        <div class="month-label">March</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Think Faster, Talk Smarter</div>
+              <div class="book-author">Matt Abrahams</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Communication</span>
+            </div>
+            <div class="book-review">
+              <p>Having already listened to all of the author's podcast episodes, reading the book was a welcome refresher — with all of the key concepts supported by clear examples. A must-have for anyone subject to spontaneous communication regularly.</p>
+              <p>The key to spontaneous communication includes: calming anxiety (breathing exercises help), unlocking creativity by not judging yourself, redefining your mindset, listening to understand, leveraging story structure, and always focusing on the core message you're trying to convey.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Contagious</div>
+              <div class="book-author">Jonah Berger</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Marketing</span>
+              <span class="book-tag">Psychology</span>
+            </div>
+            <div class="book-review">
+              <p>The perfect recipe book for making product ideas and messages stick and gain virality. Berger succinctly summarizes six steps (the acronym <strong>STEPPS</strong>) to produce valuable, viral messaging across products.</p>
+            </div>
+            <button class="takeaways-toggle" onclick="toggleTakeaways(this)">
+              The STEPPS Framework <span class="toggle-arrow">&#8250;</span>
+            </button>
+            <div class="takeaways-content">
+              <ul>
+                <li><strong>Social Currency:</strong> We share things that make us look good. Leverage inner remarkability, game mechanics, and make people feel like insiders.</li>
+                <li><strong>Triggers:</strong> Top of mind, tip of tongue. Make your product triggered by environmental cues and context.</li>
+                <li><strong>Emotion:</strong> Make people care enough to share. High-arousal emotions — awe, anger, anxiety — are key for virality.</li>
+                <li><strong>Public:</strong> Make it observable. People tend to follow one another, so public visibility creates momentum.</li>
+                <li><strong>Practical Value:</strong> Highlight the value to spread the word — price discounts, promotions, and quantity restraints all work. Use the "Rule of 100" for pricing.</li>
+                <li><strong>Stories:</strong> Valuable stories are Trojan horses — information travels under the guise of idle chatter. The surface plot grabs attention while the body carries the hidden message.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Phoenix Project</div>
+              <div class="book-author">Gene Kim, Kevin Behr &amp; George Spafford</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Technology</span>
+              <span class="book-tag">Management</span>
+              <span class="book-tag">DevOps</span>
+            </div>
+            <div class="book-review">
+              <p>A business novel about streamlining IT operations and aligning DevOps and other teams to eliminate bottlenecks and facilitate timely product delivery. The book touches on four types of work — planned work, change management, business work, and unplanned work — and teaches effective ways to handle unplanned work that gets in the way of delivering business impact.</p>
+              <p>The three ways of streamlining IT operations: (1) Creating fast flow through safe-to-change systems, (2) Fixing quality at source to avoid rework, and (3) Fostering experimentation and trust between teams.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- February -->
+      <div class="month-section">
+        <div class="month-label">February</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Psychology of Money</div>
+              <div class="book-author">Morgan Housel</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Finance</span>
+              <span class="book-tag">Self-Help</span>
+            </div>
+            <div class="book-review">
+              <p>Small but powerful. The insights packed in this book compel the reader to think about making financial reforms while also invoking a retrospective of the past. The book ends with a very interesting summary of American financial history, comparing and contrasting the various waves of economic rise and fall since World War II.</p>
+            </div>
+            <button class="takeaways-toggle" onclick="toggleTakeaways(this)">
+              Key Takeaways <span class="toggle-arrow">&#8250;</span>
+            </button>
+            <div class="takeaways-content">
+              <ul>
+                <li>Market volatility is a fee, not a fine — everything catches up in the end</li>
+                <li>Financial goals differ for everyone; don't take advice from people whose goals don't align with yours</li>
+                <li>Financial independence, rather than becoming wealthy, is a healthier goal</li>
+                <li>You don't need a specific goal to save — you can simply save more</li>
+                <li>Calculate how much risk you can take and set reasonable expectations</li>
+                <li>Financial decisions are like karma — they catch up with you sooner or later</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">David and Goliath</div>
+              <div class="book-author">Malcolm Gladwell</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Psychology</span>
+              <span class="book-tag">Business</span>
+            </div>
+            <div class="book-review">
+              <p>A classic Gladwell — inundated with examples and inspiring stories of people using their strengths to achieve things that might have seemed improbable. The book shows how history has time and again portrayed David as the weakling, but in reality, those deemed "weaker" often have something far more potent in their arsenal.</p>
+              <p>The inverted U curve was an interesting concept: too little or too much of anything can be detrimental. The bottom line — it's not luck or valor; it's about how one uses the skills one has to overcome whatever shortcomings one might face. Features individuals like Vivek Ranadivé and Emil Freireich as compelling examples.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Surely You're Joking, Mr. Feynman!</div>
+              <div class="book-author">Richard Feynman</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Biography</span>
+              <span class="book-tag">Science</span>
+            </div>
+            <div class="book-review">
+              <p>This series of recorded instances from the life of the world-famous Nobel laureate is an inspiring and gripping read. The chapters, though seemingly unrelated, flow into each other with a strange humor, taking us from MIT to Princeton to Los Alamos, Cornell, and Caltech.</p>
+              <p>This collection of memoirs gives you a real insight into how a great mind worked — and inspires every reader to be relentlessly curious, question the status quo, and be adventurous in spirit and mind.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">No Ordinary Time</div>
+              <div class="book-author">Doris Kearns Goodwin</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Biography</span>
+            </div>
+            <div class="book-review">
+              <p>A gripping read as expected from Doris Kearns Goodwin. This book follows FDR's life through the years 1939 to 1945, with a focus on his leadership and Eleanor's hardworking and visionary role. It also gives key insights into their earlier lives and the New Deal era.</p>
+              <p>The book humanizes one of the greatest statesmen of the century, showing that their strengths were far greater than their weaknesses. It gives insight into the rise of the United States from military underdog to the world's leading supplier of munitions and manpower during World War II. A must-read for any lover of American history.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Longitude</div>
+              <div class="book-author">Dava Sobel</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Science</span>
+            </div>
+            <div class="book-review">
+              <p>A quick but intriguing read about the history of watches and maritime navigation. This book tells the story of a self-taught clockmaker whose ingenuity led to the discovery of a clock devoid of a pendulum — one that didn't lose time at sea.</p>
+              <p>It beautifully introduces the problem: sea farers faced enormous difficulty determining longitude because it depended on time, and an error of just one second could result in a navigational error of hundreds of miles. It also covers the internal politics between scientists and astronomers working to advance their competing theories. A really enjoyable read.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Mastery</div>
+              <div class="book-author">Robert Greene</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Self-Help</span>
+              <span class="book-tag">Psychology</span>
+            </div>
+            <div class="book-review">
+              <p>A gripping book about how everyone is capable of becoming a master or genius. Through a series of examples ranging from Charles Darwin to Leonardo da Vinci to Martha Graham and Mozart, the author describes the gradual and tedious process of becoming a master, which entails a fixed number of steps and phases.</p>
+              <p>Phase 1 is finding your life's calling. Phase 2 is the apprenticeship — observation, tedious practice, and active experimentation. Phase 3 is the creative-active phase, where actions become second nature. The book is clear: attaining mastery is not an end goal but a continual process requiring renewed energy every single day.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- January -->
+      <div class="month-section">
+        <div class="month-label">January</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Bezos Blueprint</div>
+              <div class="book-author">Carmine Gallo</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Communication</span>
+              <span class="book-tag">Business</span>
+            </div>
+            <div class="book-review">
+              <p>A great resource on how to write great memos and successfully convey information to the reader. The three-part structure covers: (1) tools for good written communication — bottom line on top, simple words, active voice, short sentences; (2) building story structure — the 3-act framework, origin stories, and working backwards; and (3) delivering the plan through symbols, data, and a clear log line backed by three key messages.</p>
+              <p>The difference between metaphor and analogy was particularly valuable — metaphors are real-life comparisons (A is B), while analogies are metaphors brought to life with a story behind them. Remember: Flesch-Kincaid score of 8 or below and a readability score of 50 or more in all documents.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Steve Jobs</div>
+              <div class="book-author">Walter Isaacson</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Biography</span>
+              <span class="book-tag">Technology</span>
+            </div>
+            <div class="book-review">
+              <p>An interesting read about one of the most genius salespeople the world has ever seen — with presentation skills that were mind-blowing and a life that was even more so. The book takes you through his adoption, his hippie phase, and his partnership with Steve Wozniak to found Apple.</p>
+              <p>Steve Jobs, as portrayed in the book, can be an aspirational leader but not an aspirational human being. It gives a firsthand account of his stint at NeXT and Pixar, and it is inspiring to see how he managed his work with utmost precision. The book compels the reader to debate what is important: the need to control everything and succeed while making enemies, or the need to let go of some things and focus on interpersonal relationships.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== 2023 ===================== -->
+  <section id="year-2023" class="year-section">
+    <div class="container">
+      <div class="year-header">
+        <h2 class="year-title">2023</h2>
+        <span class="year-count">29 Books</span>
+      </div>
+
+      <!-- November & December -->
+      <div class="month-section">
+        <div class="month-label">November &amp; December</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Bitter Brew</div>
+              <div class="book-author">William Knoedelseder</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">History</span>
+            </div>
+            <div class="book-review">
+              <p>A gripping read from start to finish that feels almost like fiction. The author beautifully depicts the century-long history of Anheuser-Busch — from Adolphus Busch, the German immigrant who set up the brewery, through successive generations, to August IV and the controversies that eventually led to the company's acquisition by Belgian beverage giant InBev.</p>
+              <p>It is a perfect business study on how effective marketing and quality control can make a product — and how failing to take calculated risks internationally can hurt a company big time. A revealing chronicle of American progress and decline over 150 years.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">How Dogs Love Us</div>
+              <div class="book-author">Gregory Berns</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Science</span>
+              <span class="book-tag">Animals</span>
+            </div>
+            <div class="book-review">
+              <p>The book follows the "dog project" that a neuroscientist undertook to understand what dogs are actually thinking. Though much of the book is about training dogs to lie still in an MRI machine, the journey teaches more about how much dogs love us and try to judge our moods and intentions.</p>
+              <p>The MRI scans of caudate movement reinforced this. It also proves that positive reward training is more effective than alpha-pack-style training. A worthwhile read: if we give dogs food and shelter, they give us their compassion and attention. They are constantly communicating — all we need to do is pay attention.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Presentation Secrets of Steve Jobs</div>
+              <div class="book-author">Carmine Gallo</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Communication</span>
+              <span class="book-tag">Business</span>
+            </div>
+            <div class="book-review">
+              <p>A must-read for anyone who presents to an audience. As a product manager who presents regularly, I took several key learnings from this book. It is divided into three acts: Create the Story, Deliver the Experience, and Refine and Rehearse.</p>
+              <p>Key takeaways: create a Twitter-like headline, identify the antagonist (the problem) and the protagonist (your solution), use simplified presentations with minimal words, share a "holy sh*t moment," and practice until the presentation looks effortless. The book makes presenting very similar to acting — and that framing works.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- October -->
+      <div class="month-section">
+        <div class="month-label">October</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The President and the Freedom Fighter</div>
+              <div class="book-author">Brian Kilmeade</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Biography</span>
+            </div>
+            <div class="book-review">
+              <p>A bit bland — especially after reading Team of Rivals, which goes into far greater detail about Abraham Lincoln's life. The research feels somewhat halfhearted, but the concept is novel: it meticulously puts two great lives together — Lincoln the president, and Frederick Douglass the freedom fighter.</p>
+              <p>250 pages doesn't do justice to either life, but the main point — that both characters are pivotal in U.S. history, yet are not respected equally — is well-taken. A decent summary for a peek into one of the most important periods in American history.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Made to Stick</div>
+              <div class="book-author">Chip Heath &amp; Dan Heath</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Communication</span>
+              <span class="book-tag">Marketing</span>
+            </div>
+            <div class="book-review">
+              <p>A must-read to become a successful communicator. Explains why some ideas survive and others don't, using the acronym <strong>SUCCESS</strong>: Simple, Unexpected, Concrete, Credible, Emotional, Stories.</p>
+              <p>The process for effective communication: identify the core message, figure out what's counterintuitive about it, and communicate it in a way that breaks your audience's guessing machine. Stories connect, challenge, and inspire. A classic framework worth revisiting regularly.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- September -->
+      <div class="month-section">
+        <div class="month-label">September</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Shoe Dog</div>
+              <div class="book-author">Phil Knight</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Biography</span>
+              <span class="book-tag">Business</span>
+            </div>
+            <div class="book-review">
+              <p>A solid read, though not gripping enough to pick up every evening. The story of hard work and its translation into success is portrayed vividly — from the inception of Nike as a distributor of Japanese "Blue Ribbon" shoes, through betrayal, to setting up factories in Asia and ultimately going public.</p>
+              <p>An illustrative, entertaining, and educational read. A must-read for people with an entrepreneurial mindset, and also something of a case study in managing difficult people.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Talk Like TED</div>
+              <div class="book-author">Carmine Gallo</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Communication</span>
+            </div>
+            <div class="book-review">
+              <p>Really opened up my mind about public speaking. The key to efficient public speaking is practice, being yourself, keeping it succinct (all TED talks are under 18 minutes), and using multi-sensory tools. There are many subtle communication techniques here — like how to use humor judiciously to make a presentation more memorable, and how storytelling plays a crucial role in effective presentations.</p>
+              <p>Topics are most effective and memorable when there's a jaw-dropping moment, or when you teach your audience something new in a simple fashion.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- August -->
+      <div class="month-section">
+        <div class="month-label">August</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Midnight Library</div>
+              <div class="book-author">Matt Haig</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Fiction</span>
+            </div>
+            <div class="book-review">
+              <p>My first fiction novel in a long time. Nora Seed, the main character, is not happy with her life and overdoses in an attempt to escape it. But she ends up at the Midnight Library, guided by her school teacher, and revisits different versions of her life — the result of choices she hadn't made. Each version turns out to be missing something, and she was not happy in any of them.</p>
+              <p>More importantly, she sees the positive side of all her options and decides to try her current life once more. The most important lesson: no choices are bad choices, and life can be salvaged at any point. No matter what, your current life is the best possible one you can lead.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Team of Rivals</div>
+              <div class="book-author">Doris Kearns Goodwin</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Biography</span>
+            </div>
+            <div class="book-review">
+              <p>A tad bit lengthy but a very well-written, gripping account of the political ingenuity of perhaps America's greatest president. The book tracks the life story of Lincoln alongside his rivals — Henry Seward, Salmon Chase, and Edward Bates — who were all contenders for the presidential nomination in 1860.</p>
+              <p>It beautifully portrays Lincoln's rise from obscurity to the White House, his political ingenuity, and his decision to appoint all his rivals to his cabinet. The book covers the establishment of the Republican Party, the secession of southern states, and Lincoln's evolving stance on slavery — ending with his assassination. A must-read for lovers of American history.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Design of Everyday Things</div>
+              <div class="book-author">Don Norman</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Design</span>
+              <span class="book-tag">Product Management</span>
+            </div>
+            <div class="book-review">
+              <p>A very interesting and informative read. The book introduces Human-Centered Design and its four major components: affordances (what the product offers), signifiers (how to use the affordances), mapping (connecting signifiers to affordances), and feedback (confirming correct use). Together, these form the foundation of well-designed products.</p>
+              <p>The book also covers the psychology of human action, the seven stages of processing, and a key principle: more often than not, when something goes wrong, the problem is a design issue — not user error. Highly recommended for any product manager or designer.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- July -->
+      <div class="month-section">
+        <div class="month-label">July</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Roots</div>
+              <div class="book-author">Alex Haley</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Fiction/Narrative</span>
+            </div>
+            <div class="book-review">
+              <p>Heart-wrenching, riveting, and gripping. Alex Haley has presented the facts in such a vivid way that this cannot be mistaken for fiction. A must-read for anyone who wants to know more about the lesser-known history of slavery in America.</p>
+              <p>Through seven generations — from the capture of Kunta Kinte in West Africa to Alex Haley himself — the book tells a story of slavery, freedom, torture, and eventual liberation. The history is told so lucidly through narrative that the reader can literally visualize the war for emancipation through the eyes of those who lived it. A profoundly perspective-shifting read.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Lean Product Playbook</div>
+              <div class="book-author">Dan Olsen</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Product Management</span>
+            </div>
+            <div class="book-review">
+              <p>A must-have for product managers. Every aspiring and existing PM should go through this book. It starts with the concept of product-market fit — a product addressing underserved customer needs — and outlines the lean product process in six iterative steps: determine your target customer, identify underserved needs, define your value proposition, specify your MVP feature set, create your MVP prototype, and test with customers.</p>
+              <p>The book also covers UX design principles (the UX design iceberg), how to measure metrics using the AARRR framework, and Kano model analysis. An essential, practical toolkit.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- June -->
+      <div class="month-section">
+        <div class="month-label">June</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Sapiens</div>
+              <div class="book-author">Yuval Noah Harari</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Science</span>
+            </div>
+            <div class="book-review">
+              <p>Exceptional and provocative. Had been meaning to read this for nine years — well worth the wait. It explains four revolutions that changed the dynamics of nature and put humans at the top of the food chain: fire gave us power, farming gave us stability, money gave us community, and science and the Industrial Revolution gave us dangerous power.</p>
+              <p>The book concisely packs the entire human history into 450 pages, showing how many imaginary constructs it takes to bind us as a community. It compels you to think: what do we want? And will the next species look upon sapiens the way we look down upon Neanderthals?</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Escape Velocity</div>
+              <div class="book-author">Geoffrey A. Moore</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Strategy</span>
+              <span class="book-tag">Product Management</span>
+            </div>
+            <div class="book-review">
+              <p>A must-read for every product manager and entrepreneur — closely related to Crossing the Chasm by the same author. This book explores the concept of transitioning a company from innovation to deployment to optimization through five hierarchy of powers: Category, Company, Market, Offer, and Execution.</p>
+              <p>The book is riddled with matrices and playbooks for each power level. My favorite is the 9-point market strategy: Target Customer, Compelling Reason to Buy, Whole Offer, Partners and Allies, Sales Strategy, Pricing Strategy, Competition, Positioning, and Next Target. An essential and practical PM toolkit — one I'll definitely return to.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- May -->
+      <div class="month-section">
+        <div class="month-label">May</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Wizard and the Prophet</div>
+              <div class="book-author">Charles C. Mann</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Science</span>
+              <span class="book-tag">Environment</span>
+            </div>
+            <div class="book-review">
+              <p>A highly informative book without any authorial agenda — true journalistic writing that leaves the reader in deep thought about climate change and the fate of the human species. The book compares and contrasts two schools of thought through the lives of ecologist William Vogt and agronomist Norman Borlaug.</p>
+              <p>Vogt believed the end is inevitable if we continue to consume resources at the current rate; Borlaug believed technology will find a way to evade extinction. While the author doesn't take sides, he argues that both perspectives, working together, would be the most effective path to a sustainable future.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Sixth Extinction</div>
+              <div class="book-author">Elizabeth Kolbert</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Science</span>
+              <span class="book-tag">Environment</span>
+            </div>
+            <div class="book-review">
+              <p>A nice narration of how we are inching toward the sixth extinction. Through examples ranging from woolly mammoths to Sumatran rhinos to the great auk and the ecological islands of the Amazon, the author collects evidence of how humans are contributing to extinction — while also trying to prevent it. She draws comparison from the five earlier mass extinctions and touches on why humans have dodged evolution through what is called the "madness gene."</p>
+              <p>A compelling, sobering, and important read.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- April -->
+      <div class="month-section">
+        <div class="month-label">April</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Audacity of Hope</div>
+              <div class="book-author">Barack Obama</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Politics</span>
+              <span class="book-tag">Biography</span>
+            </div>
+            <div class="book-review">
+              <p>A gripping narrative on how politics should be. A bipartisan view on faith, race, international affairs, religion, politics, and family. Though it explicitly presents Obama's vision for how policy-making should look, it gives fair critique of both conservative and liberal commentaries, discussing their merits and demerits.</p>
+              <p>As the President says in the book: politics is not about making the laws — it's more about interpreting them. A thought-provoking and nuanced read.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Cracking the PM Career</div>
+              <div class="book-author">Gayle McDowell &amp; Jackie Bavaro</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Product Management</span>
+            </div>
+            <div class="book-review">
+              <p>A must-read for every product manager. It gives a clear understanding of the skills, strategy frameworks, and practices it takes to become a successful product manager. It also provides a clear demarcation of the different PM roles that are often confused, and the various levels of product management.</p>
+              <p>A lengthy book, but worth the effort. It also gives a clear idea of what the PM job entails in different industries, and I could truly connect it with the role I'm currently in.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Crossing the Chasm</div>
+              <div class="book-author">Geoffrey A. Moore</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Product Management</span>
+              <span class="book-tag">Strategy</span>
+            </div>
+            <div class="book-review">
+              <p>A must-read for every product manager, product marketing manager, and entrepreneur. Lucidly points out the different market segments and ways to penetrate each: Visionaries, Pragmatists, Early Adopters, Late Adopters, and Laggards.</p>
+              <p>The strategy for crossing the chasm: target your point of attack, assemble your invasion force, define the battle, and launch the invasion. For the success of a product, one should focus on a niche while having the whole product analysis in place. Each phase of the high-tech market lifecycle comes with challenges — this book at least gives you a playbook for tackling them.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- March -->
+      <div class="month-section">
+        <div class="month-label">March</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Caste</div>
+              <div class="book-author">Isabel Wilkerson</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Social History</span>
+            </div>
+            <div class="book-review">
+              <p>Heart-wrenching and eye-opening. It gives an unfiltered account of the racism prevalent in America until the 1970s and draws close comparisons to the caste system in India and the segregation of Nazi Germany. For me, it was educational — and sometimes I had to pause reading to process the trauma that people must have gone through for generations.</p>
+              <p>It gave me perspective into life and the biases that people cling to in order to feel entitled to the good things in life. The reflections in the book are relatable, including the recent resurgence of caste-like thinking across the world.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Onward</div>
+              <div class="book-author">Howard Schultz</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Business</span>
+              <span class="book-tag">Biography</span>
+            </div>
+            <div class="book-review">
+              <p>The story of the Starbucks founder's return to the CEO position following a new economic downturn at the company. It feels a little unauthentic at times, but the story is real. Longer than necessary, but a good read on business strategy. It was inspiring to see how a good business leader steered his company out of economic turmoil when the country's economy was in one of the worst shapes in history.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Becoming</div>
+              <div class="book-author">Michelle Obama</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Biography</span>
+            </div>
+            <div class="book-review">
+              <p>A very honest and truthful memoir that shows the power of perseverance and grit. Inspiring in the best sense — it shows how success does not come easy to anyone, and one has to work hard for it. But at the same time it reinforces: if you try, you can do anything.</p>
+              <p>From the south side of Chicago to the White House, one of the most popular First Ladies of the United States takes you through a journey of ups and downs and provides deep insights into the uncertainties of life and her way of tackling them. Barack Obama remains my all-time favourite political figure, but Michelle Obama through this book gave me much to ponder.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- February -->
+      <div class="month-section">
+        <div class="month-label">February</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Spare</div>
+              <div class="book-author">Prince Harry</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Biography</span>
+            </div>
+            <div class="book-review">
+              <p>Feels like reading the personal journal of someone who had all the privileges in life yet felt he had nothing. As the second in line to the throne, Prince Harry describes his lack of privacy and the continued torment of the British media. It provides a complete picture, albeit in a somewhat loose and halfhearted way.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">A Problem from Hell</div>
+              <div class="book-author">Samantha Power</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Politics</span>
+              <span class="book-tag">Human Rights</span>
+            </div>
+            <div class="book-review">
+              <p>Thought-provoking and powerful. Takes a very delicate topic — genocide — and dissects each of the major atrocities of the last centuries into four phases: Warning, Recognition, Response, and Aftermath. Though it criticizes major powers for their risk-averse perspectives before involvement, it also shows the criticism these powers can face when they do intervene and make mistakes.</p>
+              <p>The overarching theme is to compel the reader to think not about "another Vietnam" but about another Turkey, Iraq, Rwanda, Cambodia, or Bosnia. Each case is heart-wrenching and paints a perfect picture of humanity, reason, morality, and belief.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Ikigai</div>
+              <div class="book-author">Héctor García &amp; Francesc Miralles</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Self-Help</span>
+              <span class="book-tag">Philosophy</span>
+            </div>
+            <div class="book-review">
+              <p>A bestseller and rightly so. It is a summarized insight into the secrets of leading a long and healthy life, drawing from data points of the longest-lived individuals and correlating their habits. Small things like eating less than necessary, being grateful, remaining active, having good friendships, having a purpose, and being passionate are the key recommendations.</p>
+              <p>The most important takeaway for me: stay in the present and be consistent.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">The Four Agreements</div>
+              <div class="book-author">Don Miguel Ruiz</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Self-Help</span>
+              <span class="book-tag">Philosophy</span>
+            </div>
+            <div class="book-review">
+              <p>Written like a sermon, but gripping and a very easy read. It says that happiness and suffering are choices, not situations. The four agreements one must make with oneself: be impeccable with your word, don't take anything personally, don't make assumptions, and always do your best (which may be more or less depending on the day).</p>
+              <p>To live in suffering or to live in happiness is a choice that one can make at any time. A simple but genuinely powerful message.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- January -->
+      <div class="month-section">
+        <div class="month-label">January</div>
+        <div class="books-grid">
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Bose</div>
+              <div class="book-author">Chandrachur Ghose</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">History</span>
+              <span class="book-tag">Biography</span>
+            </div>
+            <div class="book-review">
+              <p>A really gripping story about the Indian freedom fighter Netaji Subhas Chandra Bose, depicting the true nature of Congress, communism, and the political scenario of India in the post-1900s. With so many roles taken up by the leader across this period, the writer does a good job of organizing events chronologically and painting a perfect biography of a person who may be the most underappreciated leader in the Indian fight for independence.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Directed</div>
+              <div class="book-author">James Burrows</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Biography</span>
+              <span class="book-tag">Entertainment</span>
+            </div>
+            <div class="book-review">
+              <p>A memoir by James Burrows — the renowned director behind popular TV shows like Friends, Cheers, Will &amp; Grace, and Frasier. Sprinkled with dialogues from each of those beloved series, it takes the reader through the inception and evolution of the sitcom in American television. An entertaining and informative read for fans of the genre.</p>
+            </div>
+          </div>
+
+          <div class="book-card">
+            <div class="book-card-header">
+              <div class="book-title">Leading</div>
+              <div class="book-author">Alex Ferguson</div>
+            </div>
+            <div class="book-tags">
+              <span class="book-tag">Leadership</span>
+              <span class="book-tag">Biography</span>
+            </div>
+            <div class="book-review">
+              <p>A tightly written leadership book by one of the greatest football managers of all time. Ferguson talks about the similarities between football and real life or corporate life — what it takes to be successful in one's field, with examples drawn from players and club staff.</p>
+              <p>He explains business principles in a purely simplistic way, covering all aspects from strategy, marketing, and negotiation to operations and finances. A compact but insightful read for anyone in a leadership role.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p>© 2026 Tulsi Mishra · Reading Journal</p>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Mobile menu
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    if (navToggle) {
+      navToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+      });
+    }
+
+    // Year tab switching
+    const tabs = document.querySelectorAll('.year-tab');
+    const sections = document.querySelectorAll('.year-section');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const year = tab.dataset.year;
+        tabs.forEach(t => t.classList.remove('active'));
+        sections.forEach(s => s.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('year-' + year).classList.add('active');
+        // Scroll to just below the tabs
+        document.getElementById('year-' + year).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Takeaways toggle
+    function toggleTakeaways(btn) {
+      btn.classList.toggle('open');
+      const content = btn.nextElementSibling;
+      content.classList.toggle('open');
+    }
+  </script>
+
+</body>
+</html>
