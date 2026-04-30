@@ -259,69 +259,46 @@ async function fetchSubstack(rssUrl, publicUrl) {
     return;
   }
 
-  // Try via CORS proxy first, then direct
-  const sources = [
-    `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`,
-    rssUrl
-  ];
+  try {
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=50`;
+    const res    = await fetch(apiUrl);
+    const json   = await res.json();
 
-  for (const src of sources) {
-    try {
-      const res  = await fetch(src);
-      let xmlText;
-      if (src.includes('allorigins')) {
-        const json = await res.json();
-        xmlText = json.contents;
-      } else {
-        xmlText = await res.text();
-      }
-      const xml = new DOMParser().parseFromString(xmlText, 'text/xml');
-      ssItems   = parseFeed(xml);
-      if (ssItems.length === 0) continue;
+    if (json.status !== 'ok' || !json.items?.length) throw new Error('No items');
 
-      document.getElementById('topbar-count').textContent = `· ${ssItems.length} articles`;
-      ssShown = SS_PAGE;
-      render();
-      return;
-    } catch { /* try next */ }
+    ssItems = json.items.map(item => {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = item.content || item.description || '';
+      const plain    = (tmp.textContent || '').replace(/\s+/g, ' ').trim();
+      const excerpt  = plain.slice(0, 200) + (plain.length > 200 ? '…' : '');
+      const words    = plain.split(/\s+/).length;
+      const readTime = Math.max(1, Math.round(words / 200));
+      let dateStr    = '';
+      try { dateStr = new Date(item.pubDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }); }
+      catch { dateStr = item.pubDate || ''; }
+      return {
+        title:    item.title?.trim() || '',
+        link:     item.link || '',
+        date:     dateStr,
+        excerpt,
+        image:    item.thumbnail || null,
+        readTime
+      };
+    });
+
+    document.getElementById('topbar-count').textContent = `· ${ssItems.length} article${ssItems.length !== 1 ? 's' : ''}`;
+    ssShown = SS_PAGE;
+    render();
+
+  } catch (err) {
+    grid.innerHTML = `
+      <div class="state-box">
+        <span class="state-icon">⚠️</span>
+        <h3>Couldn't load posts</h3>
+        <p>There was a problem fetching your Substack feed. Try refreshing the page.</p>
+        ${publicUrl ? `<p><a href="${esc(publicUrl)}" target="_blank">Visit your Substack directly ↗</a></p>` : ''}
+      </div>`;
   }
-
-  // All failed
-  grid.innerHTML = `
-    <div class="state-box">
-      <span class="state-icon">⚠️</span>
-      <h3>Couldn't load posts</h3>
-      <p>Check that your Substack URL is correct in <code>posts_data.js</code>.</p>
-      ${publicUrl ? `<p><a href="${esc(publicUrl)}" target="_blank">Visit your Substack directly ↗</a></p>` : ''}
-    </div>`;
-}
-
-function parseFeed(xml) {
-  return [...xml.querySelectorAll('item')].map(item => {
-    const title   = item.querySelector('title')?.textContent?.trim() || '';
-    const link    = item.querySelector('link')?.textContent?.trim() || '';
-    const pubDate = item.querySelector('pubDate')?.textContent || '';
-    const desc    = item.querySelector('description')?.textContent || '';
-    const content = item.querySelector('encoded')?.textContent || desc;
-
-    const tmp = document.createElement('div');
-    tmp.innerHTML = content;
-    const plain   = (tmp.textContent || '').replace(/\s+/g, ' ').trim();
-    const excerpt = plain.slice(0, 200) + (plain.length > 200 ? '…' : '');
-
-    let image = null;
-    const imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
-    if (imgMatch) image = imgMatch[1];
-
-    let dateStr = '';
-    try { dateStr = new Date(pubDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }); }
-    catch { dateStr = pubDate.split(' ').slice(1, 4).join(' '); }
-
-    const words    = plain.split(/\s+/).length;
-    const readTime = Math.max(1, Math.round(words / 200));
-
-    return { title, link, date: dateStr, excerpt, image, readTime };
-  });
 }
 
 function render() {
